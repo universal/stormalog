@@ -6,15 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import redis.clients.jedis.Jedis;
-
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
-import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
-import backtype.storm.tuple.Values;
 
 public class ActionCounterBolt extends BaseRichBolt {
 	OutputCollector _collector;
@@ -41,14 +37,11 @@ public class ActionCounterBolt extends BaseRichBolt {
         } else {
         	System.err.println(request);
         }
-       	Long count = _jedis.hincrBy("actioncount", action, 1);
+       	_jedis.hincrBy("actioncount", action, 1);
        	_collector.ack(input);
-//       	_collector.emit(new Values(action, count));
-       	
 	}
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-//        declarer.declare(new Fields("action", "count"));
 	}
 }

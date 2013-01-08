@@ -16,16 +16,10 @@ public class StormalogTopology {
 		TopologyBuilder builder = new TopologyBuilder();
 
 		builder.setSpout("spout", new RailsLogSpout(), 1);
-
-		builder.setBolt("actionfilter", new ErrorFilterBolt(false), 1)
-				.fieldsGrouping("spout", new Fields("request"));
-		builder.setBolt("actioncount", new ActionCounterBolt(), 2)
-				.shuffleGrouping("actionfilter");
-
-		builder.setBolt("errorfilter", new ErrorFilterBolt(true), 1)
-				.fieldsGrouping("spout", new Fields("request"));
-		builder.setBolt("errorhandler", new ErrorHandlerBolt(), 2)
-				.shuffleGrouping("errorfilter");
+		builder.setBolt("requestfilter", new ErrorFilterBolt(), 1).shuffleGrouping("spout");
+		
+		builder.setBolt("actioncount", new ActionCounterBolt(), 2).shuffleGrouping("requestfilter", "successful_requests");
+		builder.setBolt("errorhandler", new ErrorHandlerBolt(), 2).shuffleGrouping("requestfilter", "error_requests");
 
 		return builder.createTopology();
 	}

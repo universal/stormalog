@@ -23,7 +23,6 @@ public class RailsLogSpout extends BaseRichSpout {
 	int _currentEmitted;
 	int _totalEmitted;
 	int _success;
-	private long _started;
 	@Override
 	public void open(Map conf, TopologyContext context,
 			SpoutOutputCollector collector) {
@@ -32,7 +31,6 @@ public class RailsLogSpout extends BaseRichSpout {
 		readRequests();
 		_currentEmitted = 0;
 		_totalEmitted = 0;
-		_started = System.currentTimeMillis();
 	}
 
 	@Override
@@ -43,7 +41,7 @@ public class RailsLogSpout extends BaseRichSpout {
 		_totalEmitted++;
 		_collector.emit(new Values(request), ""+_totalEmitted);
 		
-		if(_totalEmitted - _success > 100) {
+		if(_totalEmitted - _success > 25) {
 			Utils.sleep(1);
 		}
 		
