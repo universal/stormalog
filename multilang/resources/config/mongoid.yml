@@ -1,0 +1,6 @@
+development:
+  sessions:
+    default:
+      database: stormalog
+      hosts:
+        - localhost:27017

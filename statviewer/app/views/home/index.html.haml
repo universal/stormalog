@@ -1,0 +1,14 @@
+#stats
+  = render "home/stats"
+
+:javascript
+  window.setInterval(function() {
+    $.ajax({
+      url: "/?format=js",
+      dataType: "text",
+      success: function(data) {
+        $("#stats").html(data);
+      }
+    })
+  }, 1000 );
+
