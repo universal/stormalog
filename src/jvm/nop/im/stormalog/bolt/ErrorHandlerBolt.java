@@ -14,7 +14,6 @@ public class ErrorHandlerBolt extends ShellBolt implements IRichBolt{
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-    	declarer.declare(new Fields("type"));
     }
 
     @Override

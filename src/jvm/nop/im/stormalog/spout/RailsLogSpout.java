@@ -23,6 +23,7 @@ public class RailsLogSpout extends BaseRichSpout {
 	int _currentEmitted;
 	int _totalEmitted;
 	int _success;
+
 	@Override
 	public void open(Map conf, TopologyContext context,
 			SpoutOutputCollector collector) {
@@ -35,16 +36,14 @@ public class RailsLogSpout extends BaseRichSpout {
 
 	@Override
 	public void nextTuple() {
-//		Utils.sleep(25);
 		String request = _requests.get(_currentEmitted);
 		_currentEmitted = (_currentEmitted + 1) % _requests.size();
 		_totalEmitted++;
-		_collector.emit(new Values(request), ""+_totalEmitted);
-		
-		if(_totalEmitted - _success > 25) {
+		_collector.emit(new Values(request), "" + _totalEmitted);
+
+		if (_totalEmitted - _success > 25) {
 			Utils.sleep(1);
 		}
-		
 	}
 
 	@Override
@@ -85,9 +84,6 @@ public class RailsLogSpout extends BaseRichSpout {
 		}
 	}
 
-	
-	
-	
 	@Override
 	public void close() {
 		System.out.println(_success + " -- " + _totalEmitted);
